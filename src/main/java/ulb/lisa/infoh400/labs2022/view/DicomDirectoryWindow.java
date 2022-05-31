@@ -52,7 +52,6 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         dicomAttributesTextArea = new javax.swing.JTextArea();
         dicomImageLabel = new javax.swing.JLabel();
-        saveImageResultLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -77,7 +76,6 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
         });
 
         saveImageToDatabaseButton.setText("Save Image to Database");
-        saveImageToDatabaseButton.setEnabled(false);
         saveImageToDatabaseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveImageToDatabaseButtonActionPerformed(evt);
@@ -104,17 +102,15 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(openDicomdirButton))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(saveImageResultLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(saveImageToDatabaseButton))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
-                            .addComponent(dicomImageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(dicomImageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(openDicomdirButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(saveImageToDatabaseButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -122,11 +118,10 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(19, 19, 19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(openDicomdirButton)
-                    .addComponent(saveImageToDatabaseButton)
-                    .addComponent(saveImageResultLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(saveImageToDatabaseButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -165,25 +160,19 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
 
     private void saveImageToDatabaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveImageToDatabaseButtonActionPerformed
         if( dds.selectedRecordIsImage() ){
+            /*ici c'est juste le bouton pour enregistrer et qui va appeler le dicominstance */
+            //on crée un dis qui va aller dans le dicomInstanceservice donc si on fait dis.xxx ça va ajouter dans l'autre package
             DicomInstanceServices dis = new DicomInstanceServices(dds.getSelectedRecordFile(selectedDirectory));
-            if( dis.sendInstanceToSCP() ){
-                if( dis.saveInstanceToDatabase() ){
-                    saveImageResultLabel.setText("Saved to DB");
-                }
-                else{
-                    saveImageResultLabel.setText("Error: couldn't save to DB.");                    
-                }
-            }
-            else{
-                saveImageResultLabel.setText("Error: couldn't send to SCP");                
-            }
+            /*On va ajouter le moyen pour stocker les images */
+            dis.sendToStoreSCP(); /*propose d'ajouter cette méthode dans instance service */
+            dis.saveInstanceToDatabase();
         }
     }//GEN-LAST:event_saveImageToDatabaseButtonActionPerformed
         
     public void displayImage(){
         File dicomFile = dds.getSelectedRecordFile(selectedDirectory);
         DicomInstanceServices dis = new DicomInstanceServices(dicomFile);
-        Image img = dis.getDisplayableImage();
+        Image img = dis.getImage();
         ImageIcon icon = new ImageIcon(img);
         dicomImageLabel.setIcon(icon);
         dicomImageLabel.setText("");
@@ -197,7 +186,6 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton openDicomdirButton;
-    private javax.swing.JLabel saveImageResultLabel;
     private javax.swing.JButton saveImageToDatabaseButton;
     // End of variables declaration//GEN-END:variables
 }
