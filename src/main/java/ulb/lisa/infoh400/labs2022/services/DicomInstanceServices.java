@@ -44,7 +44,7 @@ public class DicomInstanceServices {
             return null;
         }
         try {
-            SourceImage dicomImg = new SourceImage(instanceFile.toString());
+            SourceImage dicomImg = new SourceImage(instanceFile.toString());//pixelmed
             return dicomImg.getBufferedImage();
         } catch (IOException | DicomException ex) {
             LOGGER.error("Couldn't get Image from instance file.", ex);

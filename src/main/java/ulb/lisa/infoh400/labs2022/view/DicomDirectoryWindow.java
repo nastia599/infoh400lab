@@ -21,12 +21,11 @@ import ulb.lisa.infoh400.labs2022.services.DicomInstanceServices;
 public class DicomDirectoryWindow extends javax.swing.JFrame {
     
     private static final Logger LOGGER = LogManager.getLogger(DicomDirectoryWindow.class.getName());
-    private final String defaultDirectory = "e:/pCloud/ULB/TPs/INFOH400/Data/DICOMDIR";
+    private final String defaultDirectory = "C:\\Users\\nasta\\INFOH400\\DICOMDIR";//va dans notre fichier jusque dicomdir
     
     private String selectedDirectory = null;
     private DicomDirectoryServices dds = null;
-    //private DicomDirectory dicomDirectory = null;
-    //private DicomDirectoryRecord selectedDdr = null;
+    
             
     /**
      * Creates new form DicomDirectoryWindow
@@ -123,10 +122,11 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(openDicomdirButton)
-                    .addComponent(saveImageToDatabaseButton)
-                    .addComponent(saveImageResultLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(saveImageResultLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(openDicomdirButton)
+                        .addComponent(saveImageToDatabaseButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -141,30 +141,36 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void openDicomdirButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDicomdirButtonActionPerformed
-        JFileChooser fc = new JFileChooser(defaultDirectory);
+        JFileChooser fc = new JFileChooser(defaultDirectory); //va dans nos file où se trouve notre dicomdir qui nous intéresse
         
+        //showOpenDialog: affiche popup où se trouve les fichiers qu'on peut sélectionner
+        //Approve_option: java qui quand on clique dessus veut dire qu'on approuve l'option (peut avoir cancel etc..)
         if( fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION ){
-            File selectedFile = fc.getSelectedFile();
-            selectedDirectory = selectedFile.getParent();
+            File selectedFile = fc.getSelectedFile(); //récupère objet type file
+            selectedDirectory = selectedFile.getParent();//voit file d'avant 
             dds = new DicomDirectoryServices(selectedFile);
-            dicomdirJTree.setModel(dds.getModel());
+        //implémenté direct le treemodel (comme jlist a besoin d'un entity) cf dicomdirectoryservices         
+            dicomdirJTree.setModel(dds.getModel());//voit arborescence de file
         }
     }//GEN-LAST:event_openDicomdirButtonActionPerformed
 
     private void dicomdirJTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_dicomdirJTreeValueChanged
+        //file sélectionné
         if( dds != null ){
             dds.setSelectedRecord(dicomdirJTree.getLastSelectedPathComponent());
-            dicomAttributesTextArea.setText(dds.getSelectedRecordAttributes());
+            dicomAttributesTextArea.setText(dds.getSelectedRecordAttributes());//affiche info avec tag nom etc..
         }
         
-        if( dds.selectedRecordIsImage() ){
+        //renvoie est un objet de type dicomdirectory record qui contient des attributs qu’on peut voir
+        if( dds.selectedRecordIsImage() ){//dès qu'on tombe sur une image comme file : possible d'enregistrer
             saveImageToDatabaseButton.setEnabled(true);
-            displayImage();
+            displayImage();//affiche l'image
         }
     }//GEN-LAST:event_dicomdirJTreeValueChanged
 
     private void saveImageToDatabaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveImageToDatabaseButtonActionPerformed
         if( dds.selectedRecordIsImage() ){
+        //création du l'objet dicom avec les opérations qu'il peut avoir + image
             DicomInstanceServices dis = new DicomInstanceServices(dds.getSelectedRecordFile(selectedDirectory));
             if( dis.sendInstanceToSCP() ){
                 if( dis.saveInstanceToDatabase() ){
@@ -183,6 +189,8 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
     public void displayImage(){
         File dicomFile = dds.getSelectedRecordFile(selectedDirectory);
         DicomInstanceServices dis = new DicomInstanceServices(dicomFile);
+        
+        //affiche l'image sélectionnée 
         Image img = dis.getDisplayableImage();
         ImageIcon icon = new ImageIcon(img);
         dicomImageLabel.setIcon(icon);

@@ -21,7 +21,10 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Adrien Foucart
  */
-public class DicomDirectoryServices {   
+public class DicomDirectoryServices { //récupère tout ce qui est en lien avec pixelmed
+//donne les opérations dicom qu'on peut faire avec le file: celui-ci est lié au file
+//c'est via cette classe qu'on peut stocker par exemple
+ 
     private static final Logger LOGGER = LogManager.getLogger(DicomDirectoryServices.class.getName());
     
     private DicomDirectory ddr;
@@ -36,11 +39,14 @@ public class DicomDirectoryServices {
     }
     
     private void readDicomDirectory(File f){
+        //spécifique à pixelmed
         try {
+        //permet de lire un fichier et de l'extraire sous forme info dicom (tag etc.. selon standard dicom)
             AttributeList list = new AttributeList();
+
             list.read(new DicomInputStream(f));
-            ddr = new DicomDirectory(list);
-        } catch (IOException | DicomException ex) {
+            ddr = new DicomDirectory(list);//implémente treemodel dans le standard
+        } catch (IOException | DicomException ex) {//si problème de permission etc...
             LOGGER.error("Couldn't read DICOM Directory", ex);
             ddr = null;
         }
