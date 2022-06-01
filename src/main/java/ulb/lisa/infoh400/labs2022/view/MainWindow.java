@@ -31,8 +31,10 @@ import ulb.lisa.infoh400.labs2022.services.HL7Services;
  * @author Adrien Foucart
  */
 public class MainWindow extends javax.swing.JFrame {
-    
+
+//crée le lien db entitymanager vient du package persistence : se connecte à la db INFOH400
     private final EntityManagerFactory emfac = Persistence.createEntityManagerFactory("infoh400_PU");
+//fait le lien objet et entités de db (patients etc...) pour avoir accès à la db
     private final PatientJpaController patientCtrl = new PatientJpaController(emfac);
     private final DoctorJpaController doctorCtrl = new DoctorJpaController(emfac);
     private final ImageJpaController imageCtrl = new ImageJpaController(emfac);
@@ -423,9 +425,11 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private void refreshPatientList(){
-        List patients = patientCtrl.findPatientEntities();
+    //accède à la liste de notre db 
+        List patients = patientCtrl.findPatientEntities();//PatientJpaController
+    //fait le lien de la liste patient sous forme de modèle pour pouvoir afficher en jlist
         EntityListModel<Patient> model = new EntityListModel(patients);
-        
+    //jlist utilise les modèles pour afficher dans l'interface    
         itemsList.setModel(model);
     }
     

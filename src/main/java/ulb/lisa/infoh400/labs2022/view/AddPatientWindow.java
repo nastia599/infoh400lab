@@ -178,8 +178,10 @@ public class AddPatientWindow extends javax.swing.JFrame {
         updatePatient();
 
         // Create person if necessary:
+        //regarde si l'id personne de patient est null ou non (va dans personne voir l'id)
         if( patient.getIdperson().getIdperson() == null ){
-            personCtrl.create(patient.getIdperson());
+            personCtrl.create(patient.getIdperson());//si pas, c'est comme ça qu'on ajoute une nouvelle personne
+        //personne crée à partir de l'id patient, l'id personne
             LOGGER.debug("Created new person (id = %d)".formatted(patient.getIdperson().getIdperson()));
         }
         // Create patient if necessary
@@ -190,7 +192,7 @@ public class AddPatientWindow extends javax.swing.JFrame {
         
         // Save changes
         try {
-            personCtrl.edit(patient.getIdperson());
+            personCtrl.edit(patient.getIdperson()); //vient de PersonJpaController
             patientCtrl.edit(patient);
             LOGGER.debug("Edited patient (id = %d)".formatted(patient.getIdpatient()));
         } catch (NonexistentEntityException | IllegalOrphanException ex) {

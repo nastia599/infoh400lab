@@ -16,7 +16,7 @@ import ulb.lisa.infoh400.labs2022.model.Person;
  * @author Adrien Foucart
  */
 public class AddPersonPanel extends javax.swing.JPanel {
-    
+//info que le patient et le docteur ont (nom, prénom etc...)   
     private Person person = null;
     private final SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
     
@@ -38,7 +38,7 @@ public class AddPersonPanel extends javax.swing.JPanel {
     }
     
     public Person getPerson(){
-        if( person == null ){
+        if( person == null ){//crée un objet personne et le remplit avec les infos ci-dessous
             person = new Person();
         }
         

@@ -73,5 +73,5 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    <name>infoh400-labs2022</name>
+    <name>tp-infoh400-</name>
 </project>
