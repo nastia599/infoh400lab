@@ -31,13 +31,13 @@ public class DicomProviderServices {
         this.saveDirectory = saveDirectory;
     }
     
-    public void startSCPService(){
+    public void startSCPService(){//on est en connexion avec un autre port
         try {
-            scpDispatcher = new StorageSOPClassSCPDispatcher(
+            scpDispatcher = new StorageSOPClassSCPDispatcher(//pixelmed
                     this.port, 
                     this.AET, 
                     this.saveDirectory, 
-                    new DicomProviderServices.CStoreObjectHandler()
+                    new DicomProviderServices.CStoreObjectHandler()//methode ci-dessous
             );
             new Thread(scpDispatcher).start();
         }
@@ -58,11 +58,17 @@ public class DicomProviderServices {
     }
     
     private class CStoreObjectHandler extends ReceivedObjectHandler{
-
+    //ReceivedObjectHandler: en plus de recevoir ces fichier, il va dire ce qu'on en fait avec
+        
         @Override
+    //quand on reçoit un fichier on a va dans sendReceiverObject
+    //On va avoir besoin de la fonction ci-dessous : nom du fichier qu'on vient de recevoir, sa syntaxe et qui l'a envoyé
+    //on fait la même chose que quand on save sauf qu'ici c'est quand on reçoit un fichier
         public void sendReceivedObjectIndication(String dicomFileName, String transferSyntax, String callingAETitle) throws DicomNetworkException, DicomException, IOException {
             LOGGER.info("Received DICOM file: " + dicomFileName + " (calling AET = " + callingAETitle + ")");
             DicomInstanceServices dis = new DicomInstanceServices(new File(dicomFileName));
+    
+    //On envoie dans le serveur PACS le ficher (dans le serveur localhost 1112)+ enregistre ça
             if(dis.sendInstanceToSCP()){
                 if( dis.saveInstanceToDatabase() ){
                     LOGGER.info("Received object forwared & saved.");

@@ -560,8 +560,12 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_itemsListMouseClicked
 
     private void startSCPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSCPButtonActionPerformed
+        //comme si un autre ordi faisait un request 
+        //démarre tout le process du SCP: permet de store dans notre HIS (notre db) une image qu'on reçoit d'un autre port
+       
         if( dps == null )
-            dps = new DicomProviderServices("HISSCP", 11113, new File("e:/data/localpacs"));
+            //il faut faire sur un autre port que 11112 où on a déjà le HIS lié à ce port
+            dps = new DicomProviderServices("HISSCP", 11113, new File("C:\\Users\\nasta\\INFOH400\\localpath"));
         
         if( dps.isReceiverThreadRunning() ){
             dps.stopSCPService();

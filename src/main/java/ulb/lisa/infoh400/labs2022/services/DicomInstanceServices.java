@@ -112,7 +112,7 @@ public class DicomInstanceServices {
         return false;
     }
     
-    public boolean sendInstanceToSCP(){
+    public boolean sendInstanceToSCP(){//envoie dans ce store localhost
         return sendInstanceToSCP("localhost", 11112, "STORESCP");
     }
     

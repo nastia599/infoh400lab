@@ -172,7 +172,7 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
         if( dds.selectedRecordIsImage() ){
         //création du l'objet dicom avec les opérations qu'il peut avoir + image
             DicomInstanceServices dis = new DicomInstanceServices(dds.getSelectedRecordFile(selectedDirectory));
-            if( dis.sendInstanceToSCP() ){ //save dans le PACS
+            if( dis.sendInstanceToSCP() ){ //save dans le PACS (serveur d'archive)
                 if( dis.saveInstanceToDatabase() ){ //save dans la db
                     saveImageResultLabel.setText("Saved to DB");
                 }
@@ -186,7 +186,7 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveImageToDatabaseButtonActionPerformed
         
-    public void displayImage(){
+    public void displayImage(){//affiche l'image
         File dicomFile = dds.getSelectedRecordFile(selectedDirectory);
         DicomInstanceServices dis = new DicomInstanceServices(dicomFile);
         
