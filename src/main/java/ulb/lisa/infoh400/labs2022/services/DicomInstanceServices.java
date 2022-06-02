@@ -38,7 +38,9 @@ public class DicomInstanceServices {
     
     public DicomInstanceServices(Image image){
         this.image = image;
-        this.instanceFile = new File("e:/data/pacs", this.image.getInstanceuid());
+    
+    //met le file dans notre pacs qui est une dossier dans notre ordi
+        this.instanceFile = new File("C:\\Users\\nasta\\INFOH400\\dcm4che-5.25.1\\bin", this.image.getInstanceuid());
     }
 
     public java.awt.Image getDisplayableImage() {
@@ -118,14 +120,27 @@ public class DicomInstanceServices {
         try {
             AttributeList al = new AttributeList();
             al.read(instanceFile);
-            
-            new StorageSOPClassSCU(host, port, calledAET, "HISSCU", instanceFile.toString(), al.get(TagFromName.SOPClassUID).getDelimitedStringValuesOrEmptyString(), al.get(TagFromName.SOPInstanceUID).getDelimitedStringValuesOrEmptyString(), 0);
+        
+        //storageSOPclassSCU : classe de pixelmed : permet d'envoyer une image à storescp service via c-store
+        //pas besoin de créer une instance
+            new StorageSOPClassSCU("localhost", 11112, "PACS", "HIS", instanceFile.toString(), al.get(TagFromName.SOPClassUID).getDelimitedStringValuesOrEmptyString(), al.get(TagFromName.SOPInstanceUID).getDelimitedStringValuesOrEmptyString(), 0);
+        //localhost = hostname (l'endroit où on envoie notre fichier)
+        //port: celui du serveur
+        //PACS = CalledAEtitle (nom du serveur)
+        //HIS = CallingAEtitle (demande le c-store comment on s'identifie face à java)
+        //instancefile = file name (là où on a l'info de notre file)
+        
             
             return true;
         } catch (IOException | DicomException | DicomNetworkException ex) {
-            LOGGER.error("Couldn't send DICOM instance to the SCP.", ex);
+            LOGGER.error("Couldn't send DICOM instance to the SCP.", ex);//si problème au moment de la communication
+            //donc niveau du C-store et de l'association
         }
         
         return false;
     }
 }
+
+ 
+
+        
