@@ -549,10 +549,13 @@ public class MainWindow extends javax.swing.JFrame {
         EntityListModel model = (EntityListModel) itemsList.getModel();
         Object selected = model.getList().get(itemsList.getSelectedIndex());
         
+        //si on a une image dicom
         if(evt.getClickCount() == 2 && selected.getClass().getSimpleName().equals("Image")){
             DicomInstanceWindow imagePopup = new DicomInstanceWindow((Image) selected);
             imagePopup.setVisible(true);
         }
+        
+        //si on a un patient : peut envoyer via HL7
         else if(evt.getClickCount() == 2 && selected.getClass().getSimpleName().equals("Patient")){
             HL7SendWindow hl7Popup = new HL7SendWindow((Patient) selected);
             hl7Popup.setVisible(true);

@@ -121,6 +121,8 @@ public class HL7SendWindow extends javax.swing.JFrame {
 
     private void hl7SendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hl7SendButtonActionPerformed
         HL7Services hl7 = new HL7Services();
+        
+        
         HL7Services.SendADTResults results = hl7.createAndSendADT_A01(patient, hl7HostTextField.getText(), Integer.valueOf(hl7PortTextField.getText()));
         if( results == HL7Services.SendADTResults.SUCCESS ){
             adtResultsLabel.setText("Message sent and received by the server.");

@@ -50,6 +50,7 @@ public class HL7Services {
     private int currentSequenceNumber = 0;
     
     public SendADTResults createAndSendADT_A01(Patient patient, String host, int port){
+    //crée une conneciton vers receiving API
         ADT_A01 adt = createADT_A01(patient);
                 
         if( adt == null ){
@@ -72,6 +73,7 @@ public class HL7Services {
     }
     
     private ADT_A01 createADT_A01(Patient patient){
+    //création de classe service pour implémenter les fonctions types ADT
         ADT_A01 adt;
 
         adt = new ADT_A01();
