@@ -172,8 +172,8 @@ public class DicomDirectoryWindow extends javax.swing.JFrame {
         if( dds.selectedRecordIsImage() ){
         //création du l'objet dicom avec les opérations qu'il peut avoir + image
             DicomInstanceServices dis = new DicomInstanceServices(dds.getSelectedRecordFile(selectedDirectory));
-            if( dis.sendInstanceToSCP() ){
-                if( dis.saveInstanceToDatabase() ){
+            if( dis.sendInstanceToSCP() ){ //save dans le PACS
+                if( dis.saveInstanceToDatabase() ){ //save dans la db
                     saveImageResultLabel.setText("Saved to DB");
                 }
                 else{

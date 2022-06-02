@@ -25,6 +25,8 @@ import ulb.lisa.infoh400.labs2022.model.Image;
  * @author Adrien Foucart
  */
 public class DicomInstanceServices {
+//tout ce qui est en lien avec l'image (getImage, save dans la db etc...)
+    
     private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(DicomInstanceServices.class.getName());
     
     private File instanceFile;
@@ -76,17 +78,20 @@ public class DicomInstanceServices {
     }
 
     public boolean saveInstanceToDatabase() {
+    //on save l'image dans notre db, pas encore dans le PACS ici ! 
         try {
             AttributeList al = new AttributeList();
             al.read(instanceFile);
-            
+    
+    //lie objet imagectrl à la base de donnée
             EntityManagerFactory emfac = Persistence.createEntityManagerFactory("infoh400_PU");
             ImageJpaController imageCtrl = new ImageJpaController(emfac);
             
-            String instanceUID = al.get(TagFromName.SOPInstanceUID).getSingleStringValueOrEmptyString();
-            String studyUID = al.get(TagFromName.StudyInstanceUID).getSingleStringValueOrEmptyString();
-            String seriesUID = al.get(TagFromName.SeriesInstanceUID).getSingleStringValueOrEmptyString();
-            String patientID = al.get(TagFromName.PatientID).getSingleStringValueOrEmptyString();
+    //récupère les attributs liés aux colonnes de la db (info dicom)
+            String instanceUID = al.get(TagFromName.SOPInstanceUID).getSingleStringValueOrEmptyString();//uid de l'image
+            String studyUID = al.get(TagFromName.StudyInstanceUID).getSingleStringValueOrEmptyString();//uid des procédure
+            String seriesUID = al.get(TagFromName.SeriesInstanceUID).getSingleStringValueOrEmptyString();//uid de metadata commune aux images
+            String patientID = al.get(TagFromName.PatientID).getSingleStringValueOrEmptyString();//uid patient
             
             this.image = new Image();
             image.setInstanceuid(instanceUID);

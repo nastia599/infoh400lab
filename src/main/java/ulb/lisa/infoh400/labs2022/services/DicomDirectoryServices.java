@@ -57,10 +57,11 @@ public class DicomDirectoryServices { //récupère tout ce qui est en lien avec 
     }
     
     public void setSelectedRecord(Object o){
-        selectedRecord = (DicomDirectoryRecord) o;
+        selectedRecord = (DicomDirectoryRecord) o;//select le file
     }
     
     public String getSelectedRecordAttributes(){
+    //donne au constructeur le fichier et avec attribute list: pour le read
         if( selectedRecord == null ){
             return "No selected record";
         }

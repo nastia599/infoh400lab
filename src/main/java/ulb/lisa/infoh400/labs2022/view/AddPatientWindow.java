@@ -69,7 +69,6 @@ public class AddPatientWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        addPersonPanel = new ulb.lisa.infoh400.labs2022.view.AddPersonPanel();
         jLabel2 = new javax.swing.JLabel();
         phonenumberTextField = new javax.swing.JTextField();
         saveButton = new javax.swing.JButton();
@@ -119,9 +118,7 @@ public class AddPatientWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(addPersonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(fhirSearchButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
@@ -145,13 +142,8 @@ public class AddPatientWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addPersonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(fhirSearchButton)))
+                .addGap(16, 16, 16)
+                .addComponent(fhirSearchButton)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -210,7 +202,6 @@ public class AddPatientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_fhirSearchButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private ulb.lisa.infoh400.labs2022.view.AddPersonPanel addPersonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton fhirSearchButton;
     private javax.swing.JLabel jLabel1;
