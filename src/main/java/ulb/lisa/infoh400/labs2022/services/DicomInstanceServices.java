@@ -129,7 +129,9 @@ public class DicomInstanceServices {
         //PACS = CalledAEtitle (nom du serveur)
         //HIS = CallingAEtitle (demande le c-store comment on s'identifie face à java)
         //instancefile = file name (là où on a l'info de notre file)
-        
+        //(TagFromName.SOPClassUID) = affected SOPClass (doit ouvrir le fichier : ce sont des choses qu'on récupère)
+        //(TagFromName.SOPInstanceUID) = affectedSOPinstance (doit lire le fichier : récupère instanceuid avant de l'envoyer)
+        //0 = compression (envoie en localhost)
             
             return true;
         } catch (IOException | DicomException | DicomNetworkException ex) {
