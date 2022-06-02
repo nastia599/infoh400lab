@@ -68,6 +68,7 @@ public class DicomProviderServices {
             LOGGER.info("Received DICOM file: " + dicomFileName + " (calling AET = " + callingAETitle + ")");
             DicomInstanceServices dis = new DicomInstanceServices(new File(dicomFileName));
     
+    //une fois le fichier reçu on va faire les opérations suivantes:
     //On envoie dans le serveur PACS le ficher (dans le serveur localhost 1112)+ enregistre ça
             if(dis.sendInstanceToSCP()){
                 if( dis.saveInstanceToDatabase() ){

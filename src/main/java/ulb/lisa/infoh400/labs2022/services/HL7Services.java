@@ -76,7 +76,8 @@ public class HL7Services {
 
         adt = new ADT_A01();
         try {
-            adt.initQuickstart("ADT", "A01", "D");
+            adt.initQuickstart("ADT", "A01", "D");//permet de préremplir un segment MSH 
+            //avec APID (segment qui sont obligatoires et modifier ce qu'on veut mettre)
         } catch (HL7Exception | IOException ex) {
             LOGGER.error("Failed to create ADT_A01 message.", ex);
             
@@ -87,11 +88,16 @@ public class HL7Services {
             MSH msh = adt.getMSH();
             msh.getSendingApplication().getNamespaceID().setValue("HIS");
             msh.getSequenceNumber().setValue(String.valueOf(currentSequenceNumber));
-            
-            PID pid = adt.getPID();
+         //sequenceNumber: message qu'on est en train d'envoyer
+         
+            PID pid = adt.getPID();//PID s'assure qu'on a les bonnes infos
+            //on part du segment et récupère les diff champ qui nous intéresse 
+            //on a une liste de patientname où récupère une liste de nom, family name
             pid.getPatientName(0).getFamilyName().getSurname().setValue(patient.getIdperson().getFamilyname());
             pid.getPatientName(0).getGivenName().setValue(patient.getIdperson().getFirstname());
-            pid.getPatientIdentifierList(0).getID().setValue(String.valueOf(patient.getIdpatient()));
+            pid.getPatientIdentifierList(0).getID().setValue(String.valueOf(patient.getIdpatient()));  
+        //récupère info chez la patient (getidperson) 
+        
         } catch (DataTypeException ex) {
             LOGGER.error("Failed to create ADT_A01 message.", ex);
             
@@ -137,11 +143,11 @@ public class HL7Services {
         return null;
     }
     
-    public void startHL7Listener(int port){
+    public void startHL7Listener(int port){//permet de démarrer le serveur
         LOGGER.debug("Starting HL7 Listener.");
         if( hl7Listener == null ){
-            HapiContext ctxt = new DefaultHapiContext();
-            hl7Listener = ctxt.newServer(port, false);
+            HapiContext ctxt = new DefaultHapiContext();//crée le serveur hapi
+            hl7Listener = ctxt.newServer(port, false);//crée une instance du contexte HL7 service
         }
         
         if( isListeningToHL7() ){
@@ -149,7 +155,10 @@ public class HL7Services {
             return;
         }
         
+        //création de la classe receiving app
         ReceivingApplication<ADT_A01> handler = new ADTReceiverApplication();
+        
+        //on doit register le fait que les messages ADT, A01 vont être envoyé à ce handler
         hl7Listener.registerApplication("ADT", "A01", handler);
         try {
             hl7Listener.startAndWait();
@@ -173,13 +182,15 @@ public class HL7Services {
         private final EntityManagerFactory emfac = Persistence.createEntityManagerFactory("infoh400_PU");
         private final PersonJpaController personCtrl = new PersonJpaController(emfac);
         private final PatientJpaController patientCtrl = new PatientJpaController(emfac);
-    
+    //appelle personne jpa controlleur, instance de personne controlleur
 
         @Override
+        //classe de message
+        //recoit process
         public Message processMessage(ADT_A01 t, Map<String, Object> map) throws ReceivingApplicationException, HL7Exception {
             String encodedMessage = new DefaultHapiContext().getPipeParser().encode(t);
             System.out.println("Received message:\n" + encodedMessage + "\n\n");
-            
+            //prend le pid pour avoir les info de la personne
             String firstName = t.getPID().getPatientName(0).getGivenName().getValue();
             String lastName = t.getPID().getPatientName(0).getFamilyName().getSurname().getValue();
             Date dateOfBirth = t.getPID().getDateTimeOfBirth().getTimeOfAnEvent().getValueAsDate();
@@ -205,7 +216,7 @@ public class HL7Services {
             }
 
             try {
-                return t.generateACK();
+                return t.generateACK();//génère l'ACK
             } catch (IOException e) {
                 throw new HL7Exception(e);
             }

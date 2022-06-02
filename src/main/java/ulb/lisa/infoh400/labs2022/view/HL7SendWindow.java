@@ -19,7 +19,8 @@ public class HL7SendWindow extends javax.swing.JFrame {
     /**
      * Creates new form HL7SendWindow
      */
-    public HL7SendWindow(Patient pat) {
+    public HL7SendWindow(Patient pat) {//veut passer le patient 
+    //pour qu'info du patient arrive là et qu'on appuye sur send button
         patient = pat;
         initComponents();
     }
